@@ -1,0 +1,82 @@
+/* YouTube Speed Controller Styles */
+
+.yt-speed-controller {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+  gap: 4px;
+}
+
+.yt-speed-button {
+  border: none;
+  border-radius: 18px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  background-color: var(--yt-spec-badge-chip-background);
+  color: var(--yt-spec-text-primary);
+}
+
+/* Light mode */
+html[light] .yt-speed-button {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #0f0f0f;
+}
+
+html[light] .yt-speed-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+html[light] .yt-speed-button.active {
+  background-color: #0f0f0f;
+  color: white;
+}
+
+/* Dark mode */
+html[dark] .yt-speed-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+html[dark] .yt-speed-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+html[dark] .yt-speed-button.active {
+  background-color: #fff;
+  color: #0f0f0f;
+}
+
+/* Fallback if YouTube's CSS variables aren't available */
+.yt-speed-button {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #0f0f0f;
+}
+
+.yt-speed-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.yt-speed-button.active {
+  background-color: #0f0f0f;
+  color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  .yt-speed-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  .yt-speed-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .yt-speed-button.active {
+    background-color: #fff;
+    color: #0f0f0f;
+  }
+}
