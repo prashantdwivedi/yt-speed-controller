@@ -5,9 +5,9 @@ function setTheme(theme) {
     (theme === "system" &&
       window.matchMedia("(prefers-color-scheme: dark)").matches)
   ) {
-    document.body.classList.add("dark-theme");
+    document.body.classList.remove("light-theme");
   } else {
-    document.body.classList.remove("dark-theme");
+    document.body.classList.add("light-theme");
   }
 }
 
@@ -193,7 +193,10 @@ function restoreOptions() {
       }
     } else {
       // Set default theme
-      setTheme("system");
+      setTheme("dark"); // Default to dark theme
+      document.querySelector(
+        'input[name="theme"][value="dark"]'
+      ).checked = true;
       // Add a default empty row if no config exists
       addShortcutRow();
     }
@@ -220,4 +223,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Save button
   document.getElementById("save").addEventListener("click", saveOptions);
+
+  // GitHub link
+  document.getElementById("github-link").addEventListener("click", function () {
+    window.open(
+      "https://github.com/prashantdwivedi/yt-speed-controller",
+      "_blank"
+    );
+  });
 });
