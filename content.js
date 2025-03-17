@@ -27,13 +27,8 @@ function initSpeedController() {
 
   // Function to create the speed control buttons
   function createSpeedControls() {
-    // Remove existing controls if any
-    const existingControls = document.querySelector(
-      ".yt-speed-controller-container"
-    );
-    if (existingControls) {
-      existingControls.remove();
-    }
+    // Remove ALL existing controls to prevent duplication
+    removeExistingControls();
 
     // Create container for speed buttons
     const speedControlContainer = document.createElement("div");
@@ -99,69 +94,11 @@ function initSpeedController() {
 
     // Insert controls based on user preference
     if (config.placement === "subscribe") {
-      // Place next to subscribe button
-      const subscribeButton = document.querySelector("#subscribe-button");
-      if (subscribeButton) {
-        const wrapper = document.createElement("div");
-        wrapper.className = "yt-speed-controller-wrapper subscribe-placement";
-        wrapper.appendChild(speedControlContainer);
-
-        // Insert after the subscribe button
-        const metadataLine = subscribeButton.closest("#top-row");
-        if (metadataLine) {
-          metadataLine.appendChild(wrapper);
-        } else {
-          subscribeButton.parentNode.insertBefore(
-            wrapper,
-            subscribeButton.nextSibling
-          );
-        }
-      } else {
-        // If not found, try again later
-        setTimeout(createSpeedControls, 1000);
-        return;
-      }
+      // Place next to subscribe button - FIXED VERSION
+      insertNextToSubscribeButton(speedControlContainer);
     } else {
-      // Place on video player
-      const rightControls = document.querySelector(".ytp-right-controls");
-      if (rightControls) {
-        // Create a container that mimics YouTube's button style
-        const buttonContainer = document.createElement("div");
-        buttonContainer.className = "ytp-button yt-speed-controller-container";
-
-        // Force width with inline style - critical fix
-        buttonContainer.style.cssText =
-          "width: auto !important; min-width: auto !important; max-width: none !important;";
-
-        // Set attribute for CSS targeting
-        buttonContainer.setAttribute("data-force-width", "auto");
-
-        // Add the speed controls to this container
-        buttonContainer.appendChild(speedControlContainer);
-        speedControlContainer.classList.add("yt-speed-controller-player");
-
-        // Get the first button in right controls
-        const firstButton = rightControls.firstChild;
-
-        // Insert before the first button in right controls
-        if (firstButton) {
-          rightControls.insertBefore(buttonContainer, firstButton);
-        } else {
-          rightControls.appendChild(buttonContainer);
-        }
-
-        // Additional attempt to force width via JavaScript
-        setTimeout(() => {
-          if (buttonContainer) {
-            buttonContainer.style.width = "auto";
-            buttonContainer.style.setProperty("width", "auto", "important");
-          }
-        }, 100);
-      } else {
-        // If not found, try again later
-        setTimeout(createSpeedControls, 1000);
-        return;
-      }
+      // Place on video player - KEEP THIS CODE UNCHANGED
+      insertIntoVideoPlayer(speedControlContainer);
     }
 
     // Update the custom input to show current speed
@@ -169,6 +106,109 @@ function initSpeedController() {
     if (video) {
       customInput.value = video.playbackRate + "x";
       updateActiveButtonState(video.playbackRate);
+    }
+  }
+
+  // Function to remove all existing controls
+  function removeExistingControls() {
+    // Remove player controls
+    const existingPlayerControls = document.querySelectorAll(
+      ".yt-speed-controller-container"
+    );
+    existingPlayerControls.forEach((control) => control.remove());
+
+    // Remove subscribe button controls
+    const existingSubscribeControls = document.querySelectorAll(
+      ".yt-speed-controller-wrapper"
+    );
+    existingSubscribeControls.forEach((control) => control.remove());
+  }
+
+  // Function to insert controls next to subscribe button
+  function insertNextToSubscribeButton(speedControlContainer) {
+    const subscribeButton = document.querySelector("#subscribe-button");
+
+    if (subscribeButton) {
+      // Create a wrapper with proper styling
+      const wrapper = document.createElement("div");
+      wrapper.className = "yt-speed-controller-wrapper subscribe-placement";
+      wrapper.id = "yt-speed-subscribe-controls"; // Add ID for easier selection
+      wrapper.style.cssText =
+        "display: inline-flex; margin-left: 16px; align-items: center;";
+      wrapper.appendChild(speedControlContainer);
+
+      // Find the owner container which is next to the subscribe button
+      const ownerContainer = document.querySelector("#owner");
+
+      if (ownerContainer) {
+        // Check if we already have controls in the owner container
+        const existingControls = ownerContainer.querySelector(
+          "#yt-speed-subscribe-controls"
+        );
+        if (existingControls) {
+          existingControls.remove();
+        }
+
+        // Insert into the owner container
+        ownerContainer.appendChild(wrapper);
+      } else {
+        // If not found, try again later
+        setTimeout(createSpeedControls, 1000);
+      }
+    } else {
+      // If not found, try again later
+      setTimeout(createSpeedControls, 1000);
+    }
+  }
+
+  // Function to insert controls into video player
+  function insertIntoVideoPlayer(speedControlContainer) {
+    const rightControls = document.querySelector(".ytp-right-controls");
+    if (rightControls) {
+      // Create a container that mimics YouTube's button style
+      const buttonContainer = document.createElement("div");
+      buttonContainer.className = "ytp-button yt-speed-controller-container";
+      buttonContainer.id = "yt-speed-player-controls"; // Add ID for easier selection
+
+      // Force width with inline style - critical fix
+      buttonContainer.style.cssText =
+        "width: auto !important; min-width: auto !important; max-width: none !important;";
+
+      // Set attribute for CSS targeting
+      buttonContainer.setAttribute("data-force-width", "auto");
+
+      // Add the speed controls to this container
+      buttonContainer.appendChild(speedControlContainer);
+      speedControlContainer.classList.add("yt-speed-controller-player");
+
+      // Check if we already have controls in the right controls
+      const existingControls = rightControls.querySelector(
+        "#yt-speed-player-controls"
+      );
+      if (existingControls) {
+        existingControls.remove();
+      }
+
+      // Get the first button in right controls
+      const firstButton = rightControls.firstChild;
+
+      // Insert before the first button in right controls
+      if (firstButton) {
+        rightControls.insertBefore(buttonContainer, firstButton);
+      } else {
+        rightControls.appendChild(buttonContainer);
+      }
+
+      // Additional attempt to force width via JavaScript
+      setTimeout(() => {
+        if (buttonContainer) {
+          buttonContainer.style.width = "auto";
+          buttonContainer.style.setProperty("width", "auto", "important");
+        }
+      }, 100);
+    } else {
+      // If not found, try again later
+      setTimeout(createSpeedControls, 1000);
     }
   }
 
@@ -264,16 +304,28 @@ function initSpeedController() {
 
   // Function to check if controls need to be reapplied
   function checkAndReapplyControls() {
-    // Check if our controls exist
-    const existingControls = document.querySelector(
-      ".yt-speed-controller-container"
-    );
-    if (!existingControls && window.location.pathname.includes("/watch")) {
-      createSpeedControls();
-    } else if (existingControls && config.placement === "player") {
-      // Ensure width is still set to auto (YouTube might override it)
-      existingControls.style.cssText =
-        "width: auto !important; min-width: auto !important; max-width: none !important;";
+    if (window.location.pathname.includes("/watch")) {
+      if (config.placement === "player") {
+        // Check if our player controls exist
+        const playerControls = document.querySelector(
+          "#yt-speed-player-controls"
+        );
+        if (!playerControls) {
+          createSpeedControls();
+        } else {
+          // Ensure width is still set to auto (YouTube might override it)
+          playerControls.style.cssText =
+            "width: auto !important; min-width: auto !important; max-width: none !important;";
+        }
+      } else {
+        // Check if our subscribe controls exist
+        const subscribeControls = document.querySelector(
+          "#yt-speed-subscribe-controls"
+        );
+        if (!subscribeControls) {
+          createSpeedControls();
+        }
+      }
     }
   }
 
@@ -299,6 +351,53 @@ function initSpeedController() {
         width: auto !important;
         min-width: auto !important;
         max-width: none !important;
+      }
+      
+      /* Subscribe placement styles */
+      .yt-speed-controller-wrapper.subscribe-placement {
+        display: inline-flex;
+        margin-left: 16px;
+        align-items: center;
+      }
+      
+      .subscribe-placement .yt-speed-controller {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      
+      .subscribe-placement .yt-speed-button {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: #0f0f0f;
+        border-radius: 18px;
+        padding: 8px 12px;
+        font-size: 14px;
+        height: 36px;
+        line-height: 1;
+        margin: 0 2px;
+      }
+      
+      .subscribe-placement .yt-speed-button:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      
+      .subscribe-placement .yt-speed-button.active {
+        background-color: #0f0f0f;
+        color: white;
+      }
+      
+      html[dark] .subscribe-placement .yt-speed-button {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
+      
+      html[dark] .subscribe-placement .yt-speed-button:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+      
+      html[dark] .subscribe-placement .yt-speed-button.active {
+        background-color: #fff;
+        color: #0f0f0f;
       }
     `;
 

@@ -33,12 +33,14 @@
 
 /* Subscribe button placement wrapper */
 .yt-speed-controller-wrapper.subscribe-placement {
-  margin: 12px 0;
-  display: flex;
+  display: inline-flex;
+  margin-left: 16px;
+  align-items: center;
+  vertical-align: middle;
 }
 
-/* Button styles */
-.yt-speed-button {
+/* Button styles for player placement */
+.yt-speed-controller-player .yt-speed-button {
   border: none;
   border-radius: 4px;
   padding: 6px 10px;
@@ -53,11 +55,11 @@
   color: white;
 }
 
-.yt-speed-button:hover {
+.yt-speed-controller-player .yt-speed-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
 
-.yt-speed-button.active {
+.yt-speed-controller-player .yt-speed-button.active {
   background-color: rgba(255, 255, 255, 0.9);
   color: black;
 }
@@ -107,6 +109,12 @@
   padding: 8px 12px;
   font-size: 14px;
   height: 36px;
+  line-height: 1;
+  margin: 0 2px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  font-weight: 500;
 }
 
 .subscribe-placement .yt-speed-button:hover {
