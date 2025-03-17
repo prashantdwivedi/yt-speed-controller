@@ -1,58 +1,99 @@
-// Shortcut template for adding new shortcuts
-function createShortcutRow(key = "", action = "1") {
-  const shortcutRow = document.createElement("div");
-  shortcutRow.className = "shortcut-row";
+// Theme handling
+function setTheme(theme) {
+  if (
+    theme === "dark" ||
+    (theme === "system" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches)
+  ) {
+    document.body.classList.add("dark-theme");
+  } else {
+    document.body.classList.remove("dark-theme");
+  }
+}
 
-  const keyInput = document.createElement("input");
-  keyInput.type = "text";
-  keyInput.className = "shortcut-key";
-  keyInput.value = key;
-  keyInput.maxLength = 1;
-  keyInput.placeholder = "Key";
-
-  const actionSelect = document.createElement("select");
-  actionSelect.className = "shortcut-action";
-
-  const options = [
-    { value: "1", text: "1x speed" },
-    { value: "1.5", text: "1.5x speed" },
-    { value: "2", text: "2x speed" },
-    { value: "2.5", text: "2.5x speed" },
-    { value: "custom", text: "Custom speed" },
-  ];
-
-  options.forEach((option) => {
-    const optionElement = document.createElement("option");
-    optionElement.value = option.value;
-    optionElement.textContent = option.text;
-    if (option.value === action) {
-      optionElement.selected = true;
+// Listen for system theme changes
+window
+  .matchMedia("(prefers-color-scheme: dark)")
+  .addEventListener("change", (e) => {
+    const currentTheme = document.querySelector(
+      'input[name="theme"]:checked'
+    ).value;
+    if (currentTheme === "system") {
+      setTheme("system");
     }
-    actionSelect.appendChild(optionElement);
   });
 
-  const removeButton = document.createElement("button");
-  removeButton.className = "remove-shortcut-btn";
-  removeButton.textContent = "Remove";
-  removeButton.addEventListener("click", function () {
-    shortcutRow.remove();
+// Create a new shortcut row from template
+function createShortcutRow(shortcutData = {}) {
+  const template = document.getElementById("shortcut-template");
+  const clone = document.importNode(template.content, true);
+  const row = clone.querySelector(".shortcut-row");
+
+  // Set modifiers if provided
+  if (shortcutData.shortcut) {
+    const parts = shortcutData.shortcut.split("+");
+    const key = parts.pop(); // Last part is the key
+
+    // Set modifiers
+    const modifiers = parts.map((m) => m.trim());
+    row.querySelectorAll(".modifier-key").forEach((checkbox) => {
+      const modifier = checkbox.getAttribute("data-modifier");
+      if (modifiers.includes(modifier)) {
+        checkbox.checked = true;
+      }
+    });
+
+    // Set key
+    row.querySelector(".shortcut-key").value = key;
+  }
+
+  // Set action if provided
+  if (shortcutData.action !== undefined) {
+    const actionSelect = row.querySelector(".shortcut-action");
+    for (let i = 0; i < actionSelect.options.length; i++) {
+      if (actionSelect.options[i].value === shortcutData.action.toString()) {
+        actionSelect.selectedIndex = i;
+        break;
+      }
+    }
+  }
+
+  // Add event listener to remove button
+  row.querySelector(".remove-btn").addEventListener("click", function () {
+    row.remove();
   });
 
-  shortcutRow.appendChild(keyInput);
-  shortcutRow.appendChild(actionSelect);
-  shortcutRow.appendChild(removeButton);
-
-  return shortcutRow;
+  return row;
 }
 
 // Add a new shortcut row
-function addShortcutRow() {
+function addShortcutRow(shortcutData) {
   const container = document.getElementById("shortcuts-container");
-  container.appendChild(createShortcutRow());
+  container.appendChild(createShortcutRow(shortcutData));
+}
+
+// Get shortcut string from a row
+function getShortcutFromRow(row) {
+  let shortcut = "";
+
+  // Get modifiers
+  row.querySelectorAll(".modifier-key:checked").forEach((checkbox) => {
+    shortcut += checkbox.getAttribute("data-modifier") + "+";
+  });
+
+  // Get key
+  const key = row.querySelector(".shortcut-key").value.trim();
+  if (key) {
+    shortcut += key;
+    return shortcut;
+  }
+
+  return null; // No key specified
 }
 
 // Save options to chrome.storage
 function saveOptions() {
+  const theme = document.querySelector('input[name="theme"]:checked').value;
   const placement = document.querySelector(
     'input[name="placement"]:checked'
   ).value;
@@ -65,16 +106,16 @@ function saveOptions() {
   const shortcutRows = document.querySelectorAll(".shortcut-row");
 
   shortcutRows.forEach((row) => {
-    const key = row.querySelector(".shortcut-key").value.trim();
-    const action = row.querySelector(".shortcut-action").value;
-
-    if (key) {
-      keyboardShortcuts[key] =
+    const shortcut = getShortcutFromRow(row);
+    if (shortcut) {
+      const action = row.querySelector(".shortcut-action").value;
+      keyboardShortcuts[shortcut] =
         action === "custom" ? "custom" : parseFloat(action);
     }
   });
 
   const config = {
+    theme: theme,
     placement: placement,
     speeds: [1, 1.5, 2, 2.5],
     increment: increment,
@@ -102,17 +143,31 @@ function restoreOptions() {
     if (data.ytSpeedControllerConfig) {
       const config = data.ytSpeedControllerConfig;
 
+      // Set theme
+      if (config.theme) {
+        document.querySelector(
+          `input[name="theme"][value="${config.theme}"]`
+        ).checked = true;
+        setTheme(config.theme);
+      } else {
+        setTheme("system"); // Default
+      }
+
       // Set placement
-      document.querySelector(
-        `input[name="placement"][value="${config.placement}"]`
-      ).checked = true;
+      if (config.placement) {
+        document.querySelector(
+          `input[name="placement"][value="${config.placement}"]`
+        ).checked = true;
+      }
 
       // Set increment
-      const incrementRadio = document.querySelector(
-        `input[name="increment"][value="${config.increment}"]`
-      );
-      if (incrementRadio) {
-        incrementRadio.checked = true;
+      if (config.increment) {
+        const incrementRadio = document.querySelector(
+          `input[name="increment"][value="${config.increment}"]`
+        );
+        if (incrementRadio) {
+          incrementRadio.checked = true;
+        }
       }
 
       // Clear existing shortcuts
@@ -123,12 +178,10 @@ function restoreOptions() {
         const shortcuts = Object.entries(config.keyboardShortcuts);
 
         if (shortcuts.length > 0) {
-          shortcuts.forEach(([key, action]) => {
+          shortcuts.forEach(([shortcut, action]) => {
             const actionValue =
               action === "custom" ? "custom" : action.toString();
-            document
-              .getElementById("shortcuts-container")
-              .appendChild(createShortcutRow(key, actionValue));
+            addShortcutRow({ shortcut, action: actionValue });
           });
         } else {
           // Add a default empty row if no shortcuts exist
@@ -139,6 +192,8 @@ function restoreOptions() {
         addShortcutRow();
       }
     } else {
+      // Set default theme
+      setTheme("system");
       // Add a default empty row if no config exists
       addShortcutRow();
     }
@@ -146,8 +201,23 @@ function restoreOptions() {
 }
 
 // Event listeners
-document.addEventListener("DOMContentLoaded", restoreOptions);
-document.getElementById("save").addEventListener("click", saveOptions);
-document
-  .getElementById("add-shortcut")
-  .addEventListener("click", addShortcutRow);
+document.addEventListener("DOMContentLoaded", function () {
+  restoreOptions();
+
+  // Theme change listeners
+  document.querySelectorAll('input[name="theme"]').forEach((radio) => {
+    radio.addEventListener("change", function () {
+      setTheme(this.value);
+    });
+  });
+
+  // Add shortcut button
+  document
+    .getElementById("add-shortcut")
+    .addEventListener("click", function () {
+      addShortcutRow();
+    });
+
+  // Save button
+  document.getElementById("save").addEventListener("click", saveOptions);
+});

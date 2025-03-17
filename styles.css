@@ -1,34 +1,68 @@
 /* YouTube Speed Controller Styles */
 
+/* Base container styles */
 .yt-speed-controller {
   display: flex;
   align-items: center;
-  margin-left: 8px;
   gap: 4px;
+  font-family: "Roboto", "Arial", sans-serif;
 }
 
-/* Player placement specific styles */
+/* Container for the speed controller in the player */
+.yt-speed-controller-container {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  position: relative !important;
+}
+
+/* Force width auto for our container when it's a ytp-button */
+.ytp-button.yt-speed-controller-container {
+  width: auto !important;
+  min-width: auto !important;
+  max-width: none !important;
+}
+
+/* Specific styles for player placement */
 .yt-speed-controller-player {
-  margin-right: 8px;
-  margin-left: 0;
-  height: 36px;
   display: flex;
   align-items: center;
+  height: 100%;
 }
 
+/* Subscribe button placement wrapper */
+.yt-speed-controller-wrapper.subscribe-placement {
+  margin: 12px 0;
+  display: flex;
+}
+
+/* Button styles */
 .yt-speed-button {
   border: none;
-  border-radius: 18px;
-  padding: 8px 12px;
-  font-size: 14px;
-  font-family: "Roboto", sans-serif;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
-  background-color: var(--yt-spec-badge-chip-background);
-  color: var(--yt-spec-text-primary);
+  height: 28px;
+  line-height: 16px;
+  margin: 0 2px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
 }
 
+.yt-speed-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.yt-speed-button.active {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: black;
+}
+
+/* Custom speed control styles */
 .yt-custom-speed-control {
   display: flex;
   align-items: center;
@@ -37,130 +71,141 @@
 
 .yt-speed-adjust {
   padding: 4px 8px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .yt-custom-speed-input {
-  width: 40px;
+  width: 36px;
   text-align: center;
-  background: transparent;
-  border: 1px solid rgba(128, 128, 128, 0.3);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   padding: 4px;
-  color: inherit;
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
+  height: 20px;
+  font-size: 13px;
+  box-sizing: border-box;
 }
 
-/* Light mode */
-html[light] .yt-speed-button {
+.yt-custom-speed-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Subscribe placement specific styles */
+.subscribe-placement .yt-speed-button {
   background-color: rgba(0, 0, 0, 0.05);
   color: #0f0f0f;
+  border-radius: 18px;
+  padding: 8px 12px;
+  font-size: 14px;
+  height: 36px;
 }
 
-html[light] .yt-speed-button:hover {
+.subscribe-placement .yt-speed-button:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-html[light] .yt-speed-button.active {
+.subscribe-placement .yt-speed-button.active {
   background-color: #0f0f0f;
   color: white;
 }
 
-html[light] .yt-custom-speed-input {
+.subscribe-placement .yt-custom-speed-input {
+  background-color: white;
+  color: #0f0f0f;
+  border-color: rgba(0, 0, 0, 0.2);
+  height: 24px;
+}
+
+.subscribe-placement .yt-speed-adjust {
+  height: 36px;
+  width: 36px;
+}
+
+/* Light mode for subscribe placement */
+html[light] .subscribe-placement .yt-speed-button {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #0f0f0f;
+}
+
+html[light] .subscribe-placement .yt-speed-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+html[light] .subscribe-placement .yt-speed-button.active {
+  background-color: #0f0f0f;
+  color: white;
+}
+
+html[light] .subscribe-placement .yt-custom-speed-input {
   color: #0f0f0f;
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-/* Dark mode */
-html[dark] .yt-speed-button {
+/* Dark mode for subscribe placement */
+html[dark] .subscribe-placement .yt-speed-button {
   background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
 }
 
-html[dark] .yt-speed-button:hover {
+html[dark] .subscribe-placement .yt-speed-button:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-html[dark] .yt-speed-button.active {
+html[dark] .subscribe-placement .yt-speed-button.active {
   background-color: #fff;
   color: #0f0f0f;
 }
 
-html[dark] .yt-custom-speed-input {
+html[dark] .subscribe-placement .yt-custom-speed-input {
   color: #fff;
   background-color: rgba(0, 0, 0, 0.4);
-}
-
-/* Player placement specific styles */
-.yt-speed-controller-player .yt-speed-button {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: white;
-  border-radius: 4px;
-  padding: 6px 10px;
-  font-size: 13px;
-  height: 28px;
-  line-height: 16px;
-  margin-right: 2px;
-}
-
-.yt-speed-controller-player .yt-speed-button:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-.yt-speed-controller-player .yt-speed-button.active {
-  background-color: rgba(255, 255, 255, 0.9);
-  color: black;
-}
-
-.yt-speed-controller-player .yt-custom-speed-input {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
   border-color: rgba(255, 255, 255, 0.3);
-  height: 20px;
-  width: 36px;
-  font-size: 13px;
-  padding: 2px 4px;
 }
 
-.yt-speed-controller-player .yt-speed-adjust {
-  padding: 2px 6px;
-  height: 28px;
+/* Fix for YouTube's player controls */
+.ytp-right-controls {
+  display: flex !important;
+  align-items: center !important;
 }
 
-/* Fallback if YouTube's CSS variables aren't available */
-.yt-speed-button {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: #0f0f0f;
+/* Additional force for width auto - try multiple approaches */
+.ytp-button.yt-speed-controller-container {
+  width: auto !important;
 }
 
-.yt-speed-button:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+/* Try with inline style override */
+.yt-speed-controller-container[style*="width"] {
+  width: auto !important;
 }
 
-.yt-speed-button.active {
-  background-color: #0f0f0f;
-  color: white;
+/* Try with attribute selector */
+[class*="ytp-button"][class*="yt-speed-controller-container"] {
+  width: auto !important;
 }
 
-@media (prefers-color-scheme: dark) {
+/* Media query for responsive design */
+@media (max-width: 768px) {
   .yt-speed-button {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #fff;
-  }
-
-  .yt-speed-button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-
-  .yt-speed-button.active {
-    background-color: #fff;
-    color: #0f0f0f;
+    padding: 4px 8px;
+    font-size: 12px;
   }
 
   .yt-custom-speed-input {
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.4);
+    width: 32px;
+  }
+
+  .subscribe-placement .yt-speed-button {
+    padding: 6px 10px;
+    font-size: 13px;
+    height: 32px;
   }
 }

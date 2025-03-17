@@ -3,10 +3,11 @@
 
 // Default configuration
 let config = {
-  placement: "subscribe", // 'subscribe' or 'player'
+  placement: "player", // 'subscribe' or 'player'
   speeds: [1, 1.5, 2, 2.5],
   increment: 0.5,
   keyboardShortcuts: {},
+  theme: "system", // 'light', 'dark', or 'system'
 };
 
 // Load user configuration
@@ -27,7 +28,9 @@ function initSpeedController() {
   // Function to create the speed control buttons
   function createSpeedControls() {
     // Remove existing controls if any
-    const existingControls = document.querySelector(".yt-speed-controller");
+    const existingControls = document.querySelector(
+      ".yt-speed-controller-container"
+    );
     if (existingControls) {
       existingControls.remove();
     }
@@ -52,6 +55,7 @@ function initSpeedController() {
     const minusButton = document.createElement("button");
     minusButton.className = "yt-speed-button yt-speed-adjust";
     minusButton.textContent = "-";
+    minusButton.setAttribute("aria-label", "Decrease playback speed");
     minusButton.addEventListener("click", () => {
       adjustCustomSpeed(-config.increment);
     });
@@ -62,6 +66,7 @@ function initSpeedController() {
     customInput.className = "yt-custom-speed-input";
     customInput.value = "1.0x";
     customInput.size = 4;
+    customInput.setAttribute("aria-label", "Custom playback speed");
     customInput.addEventListener("change", () => {
       const value = parseFloat(customInput.value.replace("x", ""));
       if (!isNaN(value) && value > 0 && value <= 10) {
@@ -81,6 +86,7 @@ function initSpeedController() {
     const plusButton = document.createElement("button");
     plusButton.className = "yt-speed-button yt-speed-adjust";
     plusButton.textContent = "+";
+    plusButton.setAttribute("aria-label", "Increase playback speed");
     plusButton.addEventListener("click", () => {
       adjustCustomSpeed(config.increment);
     });
@@ -94,28 +100,63 @@ function initSpeedController() {
     // Insert controls based on user preference
     if (config.placement === "subscribe") {
       // Place next to subscribe button
-      const subscribeButtonContainer =
-        document.querySelector("#subscribe-button");
-      if (subscribeButtonContainer) {
-        subscribeButtonContainer.parentNode.insertBefore(
-          speedControlContainer,
-          subscribeButtonContainer.nextSibling
-        );
+      const subscribeButton = document.querySelector("#subscribe-button");
+      if (subscribeButton) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "yt-speed-controller-wrapper subscribe-placement";
+        wrapper.appendChild(speedControlContainer);
+
+        // Insert after the subscribe button
+        const metadataLine = subscribeButton.closest("#top-row");
+        if (metadataLine) {
+          metadataLine.appendChild(wrapper);
+        } else {
+          subscribeButton.parentNode.insertBefore(
+            wrapper,
+            subscribeButton.nextSibling
+          );
+        }
       } else {
         // If not found, try again later
         setTimeout(createSpeedControls, 1000);
         return;
       }
     } else {
-      // Place on video player before autoplay toggle
-      const playerControls = document.querySelector(".ytp-right-controls");
-      if (playerControls) {
-        // Insert at the beginning of the right controls
-        playerControls.insertBefore(
-          speedControlContainer,
-          playerControls.firstChild
-        );
+      // Place on video player
+      const rightControls = document.querySelector(".ytp-right-controls");
+      if (rightControls) {
+        // Create a container that mimics YouTube's button style
+        const buttonContainer = document.createElement("div");
+        buttonContainer.className = "ytp-button yt-speed-controller-container";
+
+        // Force width with inline style - critical fix
+        buttonContainer.style.cssText =
+          "width: auto !important; min-width: auto !important; max-width: none !important;";
+
+        // Set attribute for CSS targeting
+        buttonContainer.setAttribute("data-force-width", "auto");
+
+        // Add the speed controls to this container
+        buttonContainer.appendChild(speedControlContainer);
         speedControlContainer.classList.add("yt-speed-controller-player");
+
+        // Get the first button in right controls
+        const firstButton = rightControls.firstChild;
+
+        // Insert before the first button in right controls
+        if (firstButton) {
+          rightControls.insertBefore(buttonContainer, firstButton);
+        } else {
+          rightControls.appendChild(buttonContainer);
+        }
+
+        // Additional attempt to force width via JavaScript
+        setTimeout(() => {
+          if (buttonContainer) {
+            buttonContainer.style.width = "auto";
+            buttonContainer.style.setProperty("width", "auto", "important");
+          }
+        }, 100);
       } else {
         // If not found, try again later
         setTimeout(createSpeedControls, 1000);
@@ -136,6 +177,7 @@ function initSpeedController() {
     const button = document.createElement("button");
     button.className = "yt-speed-button";
     button.textContent = text;
+    button.setAttribute("aria-label", `Set playback speed to ${text}`);
     button.addEventListener("click", clickHandler);
     return button;
   }
@@ -171,7 +213,6 @@ function initSpeedController() {
       ".yt-speed-button:not(.yt-speed-adjust)"
     );
     buttons.forEach((button) => {
-      const buttonSpeed = parseFloat(button.textContent);
       if (button.textContent === activeSpeed + "x") {
         button.classList.add("active");
       } else {
@@ -192,12 +233,21 @@ function initSpeedController() {
         return;
       }
 
-      const key = e.key;
+      // Build the shortcut string based on modifier keys
+      let shortcut = "";
+      if (e.ctrlKey) shortcut += "Ctrl+";
+      if (e.altKey) shortcut += "Alt+";
+      if (e.shiftKey) shortcut += "Shift+";
+      if (e.metaKey) shortcut += "Meta+"; // Command key on Mac
+
+      // Add the pressed key
+      shortcut += e.key;
+
       if (
         config.keyboardShortcuts &&
-        config.keyboardShortcuts[key] !== undefined
+        config.keyboardShortcuts[shortcut] !== undefined
       ) {
-        if (config.keyboardShortcuts[key] === "custom") {
+        if (config.keyboardShortcuts[shortcut] === "custom") {
           // Focus the custom input
           const customInput = document.querySelector(".yt-custom-speed-input");
           if (customInput) {
@@ -205,21 +255,73 @@ function initSpeedController() {
             customInput.select();
           }
         } else {
-          setVideoSpeed(config.keyboardShortcuts[key]);
+          setVideoSpeed(config.keyboardShortcuts[shortcut]);
         }
         e.preventDefault();
       }
     });
   }
 
+  // Function to check if controls need to be reapplied
+  function checkAndReapplyControls() {
+    // Check if our controls exist
+    const existingControls = document.querySelector(
+      ".yt-speed-controller-container"
+    );
+    if (!existingControls && window.location.pathname.includes("/watch")) {
+      createSpeedControls();
+    } else if (existingControls && config.placement === "player") {
+      // Ensure width is still set to auto (YouTube might override it)
+      existingControls.style.cssText =
+        "width: auto !important; min-width: auto !important; max-width: none !important;";
+    }
+  }
+
+  // Function to inject a style element to force width
+  function injectWidthFix() {
+    // Remove any existing style element
+    const existingStyle = document.getElementById(
+      "yt-speed-controller-width-fix"
+    );
+    if (existingStyle) {
+      existingStyle.remove();
+    }
+
+    // Create a new style element
+    const style = document.createElement("style");
+    style.id = "yt-speed-controller-width-fix";
+    style.textContent = `
+      .ytp-button.yt-speed-controller-container,
+      .ytp-button.yt-speed-controller-container[style],
+      .ytp-button.yt-speed-controller-container[style*="width"],
+      div[class*="ytp-button"][class*="yt-speed-controller-container"],
+      div[data-force-width="auto"] {
+        width: auto !important;
+        min-width: auto !important;
+        max-width: none !important;
+      }
+    `;
+
+    // Add the style to the document head
+    document.head.appendChild(style);
+  }
+
   // Initial setup
+  injectWidthFix();
   createSpeedControls();
   setupKeyboardShortcuts();
+
+  // Periodically check if controls need to be reapplied
+  setInterval(checkAndReapplyControls, 2000);
 
   // Re-add controls when navigating between videos
   const observer = new MutationObserver((mutations) => {
     if (window.location.pathname.includes("/watch")) {
-      createSpeedControls();
+      // Small delay to let YouTube's UI stabilize
+      setTimeout(() => {
+        injectWidthFix();
+        createSpeedControls();
+      }, 500);
     }
   });
 
@@ -229,6 +331,21 @@ function initSpeedController() {
     characterData: true,
     childList: true,
   });
+
+  // Also observe the player for changes that might remove our controls
+  const playerObserver = new MutationObserver((mutations) => {
+    // Check if our controls are still present
+    checkAndReapplyControls();
+  });
+
+  // Start observing the player container
+  const playerContainer = document.querySelector(".html5-video-player");
+  if (playerContainer) {
+    playerObserver.observe(playerContainer, {
+      childList: true,
+      subtree: true,
+    });
+  }
 }
 
 // Initialize when the page is fully loaded
