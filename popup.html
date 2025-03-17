@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YouTube Speed Controller</title>
+    <style>
+      body {
+        width: 200px;
+        padding: 10px;
+        font-family: "Roboto", Arial, sans-serif;
+      }
+
+      h2 {
+        color: #c00;
+        font-size: 16px;
+        margin-top: 0;
+        margin-bottom: 12px;
+      }
+
+      .button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      button {
+        background-color: #f0f0f0;
+        border: none;
+        padding: 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: left;
+        transition: background-color 0.2s;
+      }
+
+      button:hover {
+        background-color: #e0e0e0;
+      }
+
+      .separator {
+        height: 1px;
+        background-color: #ddd;
+        margin: 8px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>YouTube Speed Controller</h2>
+
+    <div class="button-container">
+      <button id="options">Options</button>
+      <div class="separator"></div>
+      <button id="about">About</button>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

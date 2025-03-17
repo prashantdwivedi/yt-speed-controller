@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YouTube Speed Controller Options</title>
+    <style>
+      body {
+        font-family: "Roboto", Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: #c00;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+      }
+
+      .option-section {
+        margin-bottom: 24px;
+        padding: 16px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+      }
+
+      .option-title {
+        font-weight: 500;
+        margin-bottom: 12px;
+      }
+
+      .option-row {
+        margin-bottom: 16px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      select,
+      input {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      button {
+        background-color: #c00;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        margin-top: 16px;
+      }
+
+      button:hover {
+        background-color: #a00;
+      }
+
+      .shortcut-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .shortcut-row input[type="text"] {
+        width: 40px;
+        text-align: center;
+        margin-right: 10px;
+      }
+
+      .success-message {
+        color: green;
+        margin-top: 16px;
+        font-weight: 500;
+        display: none;
+      }
+
+      .increment-options {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .increment-option {
+        display: flex;
+        align-items: center;
+      }
+
+      .increment-option input {
+        margin-right: 5px;
+      }
+
+      .add-shortcut-btn {
+        background-color: #4caf50;
+        margin-top: 0;
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+
+      .remove-shortcut-btn {
+        background-color: #f44336;
+        margin-left: 10px;
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+
+      #shortcuts-container {
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>YouTube Speed Controller Options</h1>
+
+    <div class="option-section">
+      <div class="option-title">Button Placement</div>
+      <div class="option-row">
+        <label>
+          <input type="radio" name="placement" value="subscribe" checked />
+          Next to subscribe button
+        </label>
+        <label>
+          <input type="radio" name="placement" value="player" />
+          On video player (before autoplay toggle)
+        </label>
+      </div>
+    </div>
+
+    <div class="option-section">
+      <div class="option-title">Speed Increment</div>
+      <div class="option-row increment-options">
+        <label class="increment-option">
+          <input type="radio" name="increment" value="0.1" />
+          0.1
+        </label>
+        <label class="increment-option">
+          <input type="radio" name="increment" value="0.2" />
+          0.2
+        </label>
+        <label class="increment-option">
+          <input type="radio" name="increment" value="0.5" checked />
+          0.5
+        </label>
+        <label class="increment-option">
+          <input type="radio" name="increment" value="1" />
+          1.0
+        </label>
+        <label class="increment-option">
+          <input type="radio" name="increment" value="2" />
+          2.0
+        </label>
+        <label class="increment-option">
+          <input type="radio" name="increment" value="3" />
+          3.0
+        </label>
+        <label class="increment-option">
+          <input type="radio" name="increment" value="4" />
+          4.0
+        </label>
+      </div>
+    </div>
+
+    <div class="option-section">
+      <div class="option-title">Keyboard Shortcuts</div>
+      <div class="option-row">
+        <div id="shortcuts-container">
+          <!-- Shortcuts will be added here dynamically -->
+        </div>
+        <button id="add-shortcut" class="add-shortcut-btn">
+          Add Keyboard Shortcut
+        </button>
+      </div>
+    </div>
+
+    <button id="save">Save Options</button>
+    <div id="status" class="success-message">Options saved!</div>
+
+    <script src="options.js"></script>
+  </body>
+</html>

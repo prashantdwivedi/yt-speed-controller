@@ -7,6 +7,15 @@
   gap: 4px;
 }
 
+/* Player placement specific styles */
+.yt-speed-controller-player {
+  margin-right: 8px;
+  margin-left: 0;
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+
 .yt-speed-button {
   border: none;
   border-radius: 18px;
@@ -18,6 +27,30 @@
   transition: background-color 0.2s, color 0.2s;
   background-color: var(--yt-spec-badge-chip-background);
   color: var(--yt-spec-text-primary);
+}
+
+.yt-custom-speed-control {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.yt-speed-adjust {
+  padding: 4px 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.yt-custom-speed-input {
+  width: 40px;
+  text-align: center;
+  background: transparent;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  border-radius: 4px;
+  padding: 4px;
+  color: inherit;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
 }
 
 /* Light mode */
@@ -35,6 +68,11 @@ html[light] .yt-speed-button.active {
   color: white;
 }
 
+html[light] .yt-custom-speed-input {
+  color: #0f0f0f;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
 /* Dark mode */
 html[dark] .yt-speed-button {
   background-color: rgba(255, 255, 255, 0.1);
@@ -48,6 +86,47 @@ html[dark] .yt-speed-button:hover {
 html[dark] .yt-speed-button.active {
   background-color: #fff;
   color: #0f0f0f;
+}
+
+html[dark] .yt-custom-speed-input {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Player placement specific styles */
+.yt-speed-controller-player .yt-speed-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 13px;
+  height: 28px;
+  line-height: 16px;
+  margin-right: 2px;
+}
+
+.yt-speed-controller-player .yt-speed-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.yt-speed-controller-player .yt-speed-button.active {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: black;
+}
+
+.yt-speed-controller-player .yt-custom-speed-input {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+  height: 20px;
+  width: 36px;
+  font-size: 13px;
+  padding: 2px 4px;
+}
+
+.yt-speed-controller-player .yt-speed-adjust {
+  padding: 2px 6px;
+  height: 28px;
 }
 
 /* Fallback if YouTube's CSS variables aren't available */
@@ -78,5 +157,10 @@ html[dark] .yt-speed-button.active {
   .yt-speed-button.active {
     background-color: #fff;
     color: #0f0f0f;
+  }
+
+  .yt-custom-speed-input {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.4);
   }
 }
