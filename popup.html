@@ -58,6 +58,8 @@
         margin: 0;
         padding: 0;
         transition: background-color 0.3s, color 0.3s;
+        border-radius: 12px;
+        overflow: hidden;
       }
 
       .header {
@@ -154,7 +156,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
-        margin-bottom: 12px;
+        /* Removed margin-bottom: 12px; as requested */
       }
 
       .radio-option {
@@ -309,19 +311,18 @@
 
       .success-message {
         color: var(--success-color);
-        margin-top: 12px;
         font-weight: 500;
-        display: none;
         text-align: center;
+        background-color: var(--bg-color);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 15px;
+        width: 100%;
+        display: none;
       }
 
       /* Theme Switcher - Tailwind Style */
-      .theme-switcher-container {
-        display: flex;
-        justify-content: center;
-        margin: 20px 0;
-      }
-
       .theme-switcher {
         display: flex;
         background-color: rgba(0, 0, 0, 0.3);
@@ -350,8 +351,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
+        width: 36px;
+        height: 36px;
         border-radius: 9999px;
         color: var(--text-secondary);
         transition: all 0.2s ease;
@@ -365,7 +366,7 @@
       }
 
       .theme-icon {
-        font-size: 18px;
+        font-size: 16px;
       }
 
       /* Footer */
@@ -377,18 +378,6 @@
         border-top: 1px solid var(--border-color);
         font-size: 13px;
         color: var(--text-secondary);
-      }
-
-      .footer a {
-        color: var(--primary-color);
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-      }
-
-      .footer a:hover {
-        text-decoration: underline;
       }
     </style>
   </head>
@@ -512,51 +501,6 @@
         </button>
       </div>
 
-      <!-- Theme Switcher - Tailwind Style -->
-      <div class="theme-switcher-container">
-        <div class="theme-switcher">
-          <div class="theme-option">
-            <input
-              type="radio"
-              id="theme-system"
-              name="theme"
-              value="system"
-              class="theme-radio"
-            />
-            <label for="theme-system" class="theme-button">
-              <i class="ph ph-desktop theme-icon"></i>
-            </label>
-          </div>
-
-          <div class="theme-option">
-            <input
-              type="radio"
-              id="theme-light"
-              name="theme"
-              value="light"
-              class="theme-radio"
-            />
-            <label for="theme-light" class="theme-button">
-              <i class="ph ph-sun theme-icon"></i>
-            </label>
-          </div>
-
-          <div class="theme-option">
-            <input
-              type="radio"
-              id="theme-dark"
-              name="theme"
-              value="dark"
-              class="theme-radio"
-              checked
-            />
-            <label for="theme-dark" class="theme-button">
-              <i class="ph ph-moon-stars theme-icon"></i>
-            </label>
-          </div>
-        </div>
-      </div>
-
       <button id="save" class="save-btn">Save Settings</button>
       <div id="status" class="success-message">
         Settings saved successfully!
@@ -565,12 +509,49 @@
 
     <div class="footer">
       <span>Version 1.1</span>
-      <a
-        href="https://github.com/prashantdwivedi/yt-speed-controller"
-        target="_blank"
-      >
-        <i class="ph ph-code"></i> GitHub
-      </a>
+
+      <!-- Theme Switcher moved to footer -->
+      <div class="theme-switcher">
+        <div class="theme-option">
+          <input
+            type="radio"
+            id="theme-system"
+            name="theme"
+            value="system"
+            class="theme-radio"
+          />
+          <label for="theme-system" class="theme-button">
+            <i class="ph ph-desktop theme-icon"></i>
+          </label>
+        </div>
+
+        <div class="theme-option">
+          <input
+            type="radio"
+            id="theme-light"
+            name="theme"
+            value="light"
+            class="theme-radio"
+          />
+          <label for="theme-light" class="theme-button">
+            <i class="ph ph-sun theme-icon"></i>
+          </label>
+        </div>
+
+        <div class="theme-option">
+          <input
+            type="radio"
+            id="theme-dark"
+            name="theme"
+            value="dark"
+            class="theme-radio"
+            checked
+          />
+          <label for="theme-dark" class="theme-button">
+            <i class="ph ph-moon-stars theme-icon"></i>
+          </label>
+        </div>
+      </div>
     </div>
 
     <!-- Template for shortcut rows -->

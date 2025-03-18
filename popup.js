@@ -93,6 +93,13 @@ function getShortcutFromRow(row) {
 
 // Save options to chrome.storage
 function saveOptions() {
+  const saveButton = document.getElementById("save");
+  const status = document.getElementById("status");
+
+  // Hide save button and show status message
+  saveButton.style.display = "none";
+  status.style.display = "block";
+
   const theme = document.querySelector('input[name="theme"]:checked').value;
   const placement = document.querySelector(
     'input[name="placement"]:checked'
@@ -127,11 +134,10 @@ function saveOptions() {
       ytSpeedControllerConfig: config,
     },
     function () {
-      // Update status to let user know options were saved
-      const status = document.getElementById("status");
-      status.style.display = "block";
+      // After 2 seconds, hide the status message and show the save button again
       setTimeout(function () {
         status.style.display = "none";
+        saveButton.style.display = "block";
       }, 2000);
     }
   );
