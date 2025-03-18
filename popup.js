@@ -23,6 +23,92 @@ window
     }
   });
 
+// Display shortcuts in the main popup
+function displayShortcuts(shortcuts) {
+  const container = document.getElementById("shortcuts-container");
+
+  // Clear container
+  container.innerHTML = "";
+
+  // If no shortcuts, show message
+  if (!shortcuts || Object.keys(shortcuts).length === 0) {
+    container.innerHTML = `
+        <div class="no-shortcuts">
+          No shortcuts configured yet
+        </div>
+      `;
+    return;
+  }
+
+  // Create shortcuts list
+  const shortcutsList = document.createElement("div");
+  shortcutsList.className = "shortcuts-list";
+
+  // Display up to 3 shortcuts
+  let count = 0;
+  for (const [shortcut, action] of Object.entries(shortcuts)) {
+    if (count >= 3) {
+      // Add a "more" message if there are more than 3 shortcuts
+      const moreMessage = document.createElement("div");
+      moreMessage.className = "shortcut-item";
+      moreMessage.style.textAlign = "center";
+      moreMessage.style.color = "var(--text-secondary)";
+      moreMessage.textContent = `+ ${
+        Object.keys(shortcuts).length - 3
+      } more shortcuts`;
+      shortcutsList.appendChild(moreMessage);
+      break;
+    }
+
+    // Create shortcut item
+    const shortcutItem = document.createElement("div");
+    shortcutItem.className = "shortcut-item";
+
+    // Create action text
+    const actionText = document.createElement("div");
+    actionText.className = "shortcut-action";
+    actionText.textContent = getActionLabel(action);
+
+    // Create keys display
+    const keysDisplay = document.createElement("div");
+    keysDisplay.className = "shortcut-keys";
+
+    // Parse the shortcut string
+    const keys = shortcut.split("+");
+    keys.forEach((key, index) => {
+      const keyBadge = document.createElement("span");
+      keyBadge.className = "key-badge";
+      keyBadge.textContent = key;
+      keysDisplay.appendChild(keyBadge);
+
+      if (index < keys.length - 1) {
+        const plus = document.createElement("span");
+        plus.className = "key-plus";
+        plus.textContent = "+";
+        keysDisplay.appendChild(plus);
+      }
+    });
+
+    // Add elements to shortcut item
+    shortcutItem.appendChild(actionText);
+    shortcutItem.appendChild(keysDisplay);
+
+    shortcutsList.appendChild(shortcutItem);
+    count++;
+  }
+
+  container.appendChild(shortcutsList);
+}
+
+// Get readable label for action
+function getActionLabel(action) {
+  if (action === "custom") {
+    return "Custom Speed Input";
+  } else {
+    return `Speed: ${action}x`;
+  }
+}
+
 // Save options to chrome.storage
 function saveOptions() {
   const saveButton = document.getElementById("save");
@@ -104,6 +190,11 @@ function restoreOptions() {
         if (incrementRadio) {
           incrementRadio.checked = true;
         }
+      }
+
+      // Display shortcuts
+      if (config.keyboardShortcuts) {
+        displayShortcuts(config.keyboardShortcuts);
       }
     } else {
       // Set default theme

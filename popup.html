@@ -30,18 +30,19 @@
         --section-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
-      /* Light mode - we'll keep this for the option but default to dark */
+      /* Light mode - improved colors for better contrast and harmony */
       body.light-theme {
-        --primary-color: #1098fc;
-        --primary-hover: #0a85e9;
-        --text-color: #121212;
-        --text-secondary: #555555;
-        --bg-color: #ffffff;
-        --bg-secondary: #f5f5f5;
-        --bg-tertiary: #eaeaea;
-        --border-color: #dddddd;
+        --primary-color: #0a85e9;
+        --primary-hover: #0070cc;
+        --text-color: #333333;
+        --text-secondary: #666666;
+        --bg-color: #f8f9fa;
+        --bg-secondary: #ffffff;
+        --bg-tertiary: #f0f0f0;
+        --border-color: #e0e0e0;
         --input-bg: #ffffff;
-        --input-border: #cccccc;
+        --input-border: #d0d0d0;
+        --section-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       }
 
       * {
@@ -90,7 +91,7 @@
       }
 
       h1 {
-        font-size: 16px; /* Changed to 16px as requested */
+        font-size: 16px;
         font-weight: 600;
         margin: 0;
       }
@@ -116,7 +117,7 @@
       }
 
       .icon-button .ph-github-logo {
-        font-size: 18px; /* Added as requested */
+        font-size: 18px;
       }
 
       .content {
@@ -156,7 +157,6 @@
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
-        /* Removed margin-bottom: 12px; as requested */
       }
 
       .radio-option {
@@ -184,18 +184,22 @@
       }
 
       .radio-input:checked + .radio-label {
-        background-color: rgba(16, 152, 252, 0.15);
+        background-color: rgba(10, 133, 233, 0.15);
         border-color: var(--primary-color);
+      }
+
+      .light-theme .radio-input:checked + .radio-label {
+        background-color: rgba(10, 133, 233, 0.1);
       }
 
       .radio-text {
         margin-left: 8px;
-        font-size: 12px; /* Changed to 12px as requested */
+        font-size: 12px;
         font-weight: 500;
       }
 
       .add-btn {
-        background-color: rgba(16, 152, 252, 0.15);
+        background-color: rgba(10, 133, 233, 0.15);
         color: var(--primary-color);
         border: 1px solid var(--primary-color);
         border-radius: 8px;
@@ -211,8 +215,16 @@
         transition: background-color 0.2s;
       }
 
+      .light-theme .add-btn {
+        background-color: rgba(10, 133, 233, 0.1);
+      }
+
       .add-btn:hover {
-        background-color: rgba(16, 152, 252, 0.25);
+        background-color: rgba(10, 133, 233, 0.25);
+      }
+
+      .light-theme .add-btn:hover {
+        background-color: rgba(10, 133, 233, 0.2);
       }
 
       .save-btn {
@@ -254,6 +266,10 @@
         width: fit-content;
       }
 
+      .light-theme .theme-switcher {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+
       .theme-option {
         position: relative;
       }
@@ -290,6 +306,60 @@
 
       .theme-icon {
         font-size: 16px;
+      }
+
+      /* Shortcuts display */
+      .shortcuts-list {
+        margin-bottom: 12px;
+      }
+
+      .shortcut-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background-color: var(--bg-tertiary);
+        border-radius: 6px;
+        margin-bottom: 8px;
+        border: 1px solid var(--border-color);
+      }
+
+      .shortcut-action {
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .shortcut-keys {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .key-badge {
+        background-color: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-size: 11px;
+        font-weight: 600;
+        min-width: 20px;
+        text-align: center;
+      }
+
+      .key-plus {
+        color: var(--text-secondary);
+        font-weight: 400;
+        font-size: 11px;
+      }
+
+      .no-shortcuts {
+        text-align: center;
+        padding: 12px;
+        color: var(--text-secondary);
+        font-size: 13px;
+        background-color: var(--bg-tertiary);
+        border-radius: 6px;
+        margin-bottom: 12px;
       }
 
       /* Footer */
@@ -415,15 +485,12 @@
           <i class="ph ph-keyboard section-icon"></i>
           <h2>Shortcuts</h2>
         </div>
-        <p
-          style="
-            margin-bottom: 12px;
-            font-size: 13px;
-            color: var(--text-secondary);
-          "
-        >
-          Configure keyboard shortcuts to quickly change playback speed.
-        </p>
+
+        <div id="shortcuts-container">
+          <!-- Shortcuts will be displayed here -->
+          <div class="no-shortcuts">No shortcuts configured yet</div>
+        </div>
+
         <button id="manage-shortcuts" class="add-btn">
           <i class="ph ph-keyboard"></i>
           Manage Shortcuts
