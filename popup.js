@@ -23,74 +23,6 @@ window
     }
   });
 
-// Create a new shortcut row from template
-function createShortcutRow(shortcutData = {}) {
-  const template = document.getElementById("shortcut-template");
-  const clone = document.importNode(template.content, true);
-  const row = clone.querySelector(".shortcut-row");
-
-  // Set modifiers if provided
-  if (shortcutData.shortcut) {
-    const parts = shortcutData.shortcut.split("+");
-    const key = parts.pop(); // Last part is the key
-
-    // Set modifiers
-    const modifiers = parts.map((m) => m.trim());
-    row.querySelectorAll(".modifier-key").forEach((checkbox) => {
-      const modifier = checkbox.getAttribute("data-modifier");
-      if (modifiers.includes(modifier)) {
-        checkbox.checked = true;
-      }
-    });
-
-    // Set key
-    row.querySelector(".shortcut-key").value = key;
-  }
-
-  // Set action if provided
-  if (shortcutData.action !== undefined) {
-    const actionSelect = row.querySelector(".shortcut-action");
-    for (let i = 0; i < actionSelect.options.length; i++) {
-      if (actionSelect.options[i].value === shortcutData.action.toString()) {
-        actionSelect.selectedIndex = i;
-        break;
-      }
-    }
-  }
-
-  // Add event listener to remove button
-  row.querySelector(".remove-btn").addEventListener("click", function () {
-    row.remove();
-  });
-
-  return row;
-}
-
-// Add a new shortcut row
-function addShortcutRow(shortcutData) {
-  const container = document.getElementById("shortcuts-container");
-  container.appendChild(createShortcutRow(shortcutData));
-}
-
-// Get shortcut string from a row
-function getShortcutFromRow(row) {
-  let shortcut = "";
-
-  // Get modifiers
-  row.querySelectorAll(".modifier-key:checked").forEach((checkbox) => {
-    shortcut += checkbox.getAttribute("data-modifier") + "+";
-  });
-
-  // Get key
-  const key = row.querySelector(".shortcut-key").value.trim();
-  if (key) {
-    shortcut += key;
-    return shortcut;
-  }
-
-  return null; // No key specified
-}
-
 // Save options to chrome.storage
 function saveOptions() {
   const saveButton = document.getElementById("save");
@@ -108,39 +40,37 @@ function saveOptions() {
     document.querySelector('input[name="increment"]:checked').value
   );
 
-  // Get all keyboard shortcuts
-  const keyboardShortcuts = {};
-  const shortcutRows = document.querySelectorAll(".shortcut-row");
+  // Get the existing config to preserve shortcuts
+  chrome.storage.sync.get("ytSpeedControllerConfig", function (data) {
+    let config = {
+      theme: theme,
+      placement: placement,
+      speeds: [1, 1.5, 2, 2.5],
+      increment: increment,
+      keyboardShortcuts: {},
+    };
 
-  shortcutRows.forEach((row) => {
-    const shortcut = getShortcutFromRow(row);
-    if (shortcut) {
-      const action = row.querySelector(".shortcut-action").value;
-      keyboardShortcuts[shortcut] =
-        action === "custom" ? "custom" : parseFloat(action);
+    // Preserve existing shortcuts if they exist
+    if (
+      data.ytSpeedControllerConfig &&
+      data.ytSpeedControllerConfig.keyboardShortcuts
+    ) {
+      config.keyboardShortcuts = data.ytSpeedControllerConfig.keyboardShortcuts;
     }
+
+    chrome.storage.sync.set(
+      {
+        ytSpeedControllerConfig: config,
+      },
+      function () {
+        // After 2 seconds, hide the status message and show the save button again
+        setTimeout(function () {
+          status.style.display = "none";
+          saveButton.style.display = "block";
+        }, 2000);
+      }
+    );
   });
-
-  const config = {
-    theme: theme,
-    placement: placement,
-    speeds: [1, 1.5, 2, 2.5],
-    increment: increment,
-    keyboardShortcuts: keyboardShortcuts,
-  };
-
-  chrome.storage.sync.set(
-    {
-      ytSpeedControllerConfig: config,
-    },
-    function () {
-      // After 2 seconds, hide the status message and show the save button again
-      setTimeout(function () {
-        status.style.display = "none";
-        saveButton.style.display = "block";
-      }, 2000);
-    }
-  );
 }
 
 // Restore options from chrome.storage
@@ -175,36 +105,12 @@ function restoreOptions() {
           incrementRadio.checked = true;
         }
       }
-
-      // Clear existing shortcuts
-      document.getElementById("shortcuts-container").innerHTML = "";
-
-      // Add keyboard shortcuts
-      if (config.keyboardShortcuts) {
-        const shortcuts = Object.entries(config.keyboardShortcuts);
-
-        if (shortcuts.length > 0) {
-          shortcuts.forEach(([shortcut, action]) => {
-            const actionValue =
-              action === "custom" ? "custom" : action.toString();
-            addShortcutRow({ shortcut, action: actionValue });
-          });
-        } else {
-          // Add a default empty row if no shortcuts exist
-          addShortcutRow();
-        }
-      } else {
-        // Add a default empty row if no shortcuts exist
-        addShortcutRow();
-      }
     } else {
       // Set default theme
       setTheme("dark"); // Default to dark theme
       document.querySelector(
         'input[name="theme"][value="dark"]'
       ).checked = true;
-      // Add a default empty row if no config exists
-      addShortcutRow();
     }
   });
 }
@@ -220,11 +126,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Add shortcut button
+  // Manage shortcuts button
   document
-    .getElementById("add-shortcut")
+    .getElementById("manage-shortcuts")
     .addEventListener("click", function () {
-      addShortcutRow();
+      window.location.href = "shortcuts.html";
     });
 
   // Save button

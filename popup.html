@@ -194,83 +194,6 @@
         font-weight: 500;
       }
 
-      /* Keyboard shortcuts */
-      .shortcuts-container {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 12px;
-        max-height: 200px;
-        overflow-y: auto;
-      }
-
-      .shortcut-row {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 6px;
-        background-color: var(--bg-tertiary);
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid var(--border-color);
-      }
-
-      .shortcut-modifiers {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-      }
-
-      .modifier-option {
-        display: flex;
-        align-items: center;
-      }
-
-      .modifier-option input[type="checkbox"] {
-        margin-right: 4px;
-      }
-
-      .key-input {
-        width: 40px;
-        text-align: center;
-        padding: 6px;
-        border: 1px solid var(--input-border);
-        border-radius: 6px;
-        background-color: var(--input-bg);
-        color: var(--text-color);
-        font-family: "Inter", sans-serif;
-      }
-
-      .shortcut-action {
-        padding: 6px;
-        border: 1px solid var(--input-border);
-        border-radius: 6px;
-        background-color: var(--input-bg);
-        color: var(--text-color);
-        font-family: "Inter", sans-serif;
-      }
-
-      .arrow {
-        color: var(--text-secondary);
-      }
-
-      .remove-btn {
-        margin-left: auto;
-        background-color: rgba(220, 53, 69, 0.2);
-        color: var(--danger-color);
-        border: none;
-        border-radius: 6px;
-        padding: 6px 10px;
-        cursor: pointer;
-        font-size: 12px;
-        font-weight: 500;
-        transition: background-color 0.2s;
-      }
-
-      .remove-btn:hover {
-        background-color: rgba(220, 53, 69, 0.3);
-      }
-
       .add-btn {
         background-color: rgba(16, 152, 252, 0.15);
         color: var(--primary-color);
@@ -490,14 +413,20 @@
       <div class="section">
         <div class="section-header">
           <i class="ph ph-keyboard section-icon"></i>
-          <h2>Keyboard Shortcuts</h2>
+          <h2>Shortcuts</h2>
         </div>
-        <div id="shortcuts-container" class="shortcuts-container">
-          <!-- Shortcuts will be added here dynamically -->
-        </div>
-        <button id="add-shortcut" class="add-btn">
-          <i class="ph ph-plus"></i>
-          Add Keyboard Shortcut
+        <p
+          style="
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+          "
+        >
+          Configure keyboard shortcuts to quickly change playback speed.
+        </p>
+        <button id="manage-shortcuts" class="add-btn">
+          <i class="ph ph-keyboard"></i>
+          Manage Shortcuts
         </button>
       </div>
 
@@ -553,50 +482,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Template for shortcut rows -->
-    <template id="shortcut-template">
-      <div class="shortcut-row">
-        <div class="shortcut-modifiers">
-          <label class="modifier-option">
-            <input type="checkbox" class="modifier-key" data-modifier="Ctrl" />
-            Ctrl
-          </label>
-          <label class="modifier-option">
-            <input type="checkbox" class="modifier-key" data-modifier="Alt" />
-            Alt
-          </label>
-          <label class="modifier-option">
-            <input type="checkbox" class="modifier-key" data-modifier="Shift" />
-            Shift
-          </label>
-          <label class="modifier-option">
-            <input type="checkbox" class="modifier-key" data-modifier="Meta" />
-            Meta
-          </label>
-        </div>
-        <span class="arrow">+</span>
-        <input type="text" class="key-input shortcut-key" placeholder="Key" />
-        <span class="arrow">→</span>
-        <select class="shortcut-action">
-          <option value="0.25">0.25x</option>
-          <option value="0.5">0.5x</option>
-          <option value="0.75">0.75x</option>
-          <option value="1">1x</option>
-          <option value="1.25">1.25x</option>
-          <option value="1.5">1.5x</option>
-          <option value="1.75">1.75x</option>
-          <option value="2">2x</option>
-          <option value="2.5">2.5x</option>
-          <option value="3">3x</option>
-          <option value="4">4x</option>
-          <option value="custom">Custom Input</option>
-        </select>
-        <button class="remove-btn">
-          <i class="ph ph-trash"></i>
-        </button>
-      </div>
-    </template>
 
     <script src="popup.js"></script>
   </body>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube Speed Controller - Shortcuts</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css"
+    />
+    <style>
+      /* Base styles */
+      :root {
+        --primary-color: #1098fc;
+        --primary-hover: #2aa5fd;
+        --text-color: #ffffff;
+        --text-secondary: #8a8a8a;
+        --bg-color: #121212;
+        --bg-secondary: #1e1e1e;
+        --bg-tertiary: #2a2a2a;
+        --border-color: #383838;
+        --input-bg: #2a2a2a;
+        --input-border: #383838;
+        --success-color: #28a745;
+        --danger-color: #dc3545;
+        --section-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Light mode */
+      body.light-theme {
+        --primary-color: #1098fc;
+        --primary-hover: #0a85e9;
+        --text-color: #121212;
+        --text-secondary: #555555;
+        --bg-color: #ffffff;
+        --bg-secondary: #f5f5f5;
+        --bg-tertiary: #eaeaea;
+        --border-color: #dddddd;
+        --input-bg: #ffffff;
+        --input-border: #cccccc;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        width: 360px;
+        margin: 0;
+        padding: 0;
+        transition: background-color 0.3s, color 0.3s;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        background-color: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .header-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .back-button {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        transition: color 0.2s, background-color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .back-button:hover {
+        color: var(--text-color);
+        background-color: var(--bg-tertiary);
+      }
+
+      h1 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .content {
+        padding: 16px;
+      }
+
+      /* Shortcut items */
+      .shortcuts-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .shortcut-item {
+        background-color: var(--bg-secondary);
+        border-radius: 12px;
+        padding: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid var(--border-color);
+      }
+
+      .shortcut-action {
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .shortcut-keys {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .key-badge {
+        background-color: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 4px 8px;
+        font-size: 12px;
+        font-weight: 600;
+        min-width: 24px;
+        text-align: center;
+      }
+
+      .key-plus {
+        color: var(--text-secondary);
+        font-weight: 400;
+      }
+
+      .record-button {
+        background-color: var(--bg-tertiary);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .record-button:hover {
+        background-color: var(--bg-color);
+      }
+
+      .record-button.recording {
+        background-color: rgba(220, 53, 69, 0.2);
+        color: var(--danger-color);
+        border-color: var(--danger-color);
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Add shortcut button */
+      .add-shortcut-container {
+        margin-top: 16px;
+      }
+
+      .add-shortcut {
+        background-color: rgba(16, 152, 252, 0.15);
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        border-radius: 8px;
+        padding: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        width: 100%;
+        transition: background-color 0.2s;
+      }
+
+      .add-shortcut:hover {
+        background-color: rgba(16, 152, 252, 0.25);
+      }
+
+      /* New shortcut form */
+      .new-shortcut-form {
+        background-color: var(--bg-secondary);
+        border-radius: 12px;
+        padding: 16px;
+        margin-top: 16px;
+        border: 1px solid var(--border-color);
+        display: none;
+      }
+
+      .form-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .form-group {
+        margin-bottom: 12px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 6px;
+        color: var(--text-secondary);
+      }
+
+      .form-select {
+        width: 100%;
+        padding: 10px;
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        border: 1px solid var(--input-border);
+        border-radius: 6px;
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+      }
+
+      .shortcut-recording {
+        width: 100%;
+        padding: 10px;
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        border: 1px solid var(--input-border);
+        border-radius: 6px;
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .shortcut-recording.active {
+        border-color: var(--primary-color);
+        background-color: rgba(16, 152, 252, 0.1);
+      }
+
+      .shortcut-recording-text {
+        color: var(--text-secondary);
+      }
+
+      .shortcut-recording.active .shortcut-recording-text {
+        color: var(--primary-color);
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .cancel-btn {
+        flex: 1;
+        background-color: var(--bg-tertiary);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .save-btn {
+        flex: 1;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .save-btn:hover {
+        background-color: var(--primary-hover);
+      }
+
+      /* Footer */
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        border-top: 1px solid var(--border-color);
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+
+      .reset-defaults {
+        background-color: var(--bg-tertiary);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        transition: background-color 0.2s;
+      }
+
+      .reset-defaults:hover {
+        background-color: var(--bg-color);
+      }
+
+      /* Delete button */
+      .delete-shortcut {
+        color: var(--danger-color);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s;
+      }
+
+      .delete-shortcut:hover {
+        background-color: rgba(220, 53, 69, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <button class="back-button" id="back-button">
+        <i class="ph ph-arrow-left"></i>
+      </button>
+      <h1>Shortcuts</h1>
+      <div style="width: 24px"></div>
+      <!-- Spacer for alignment -->
+    </div>
+
+    <div class="content">
+      <div class="shortcuts-list" id="shortcuts-list">
+        <!-- Shortcuts will be populated here dynamically -->
+      </div>
+
+      <div class="add-shortcut-container">
+        <button class="add-shortcut" id="add-shortcut">
+          <i class="ph ph-plus"></i>
+          Add New Shortcut
+        </button>
+      </div>
+
+      <div class="new-shortcut-form" id="new-shortcut-form">
+        <div class="form-title">Add New Shortcut</div>
+
+        <div class="form-group">
+          <label class="form-label">Action</label>
+          <select class="form-select" id="shortcut-action">
+            <option value="0.25">Speed: 0.25x</option>
+            <option value="0.5">Speed: 0.5x</option>
+            <option value="0.75">Speed: 0.75x</option>
+            <option value="1">Speed: 1x (Normal)</option>
+            <option value="1.25">Speed: 1.25x</option>
+            <option value="1.5">Speed: 1.5x</option>
+            <option value="1.75">Speed: 1.75x</option>
+            <option value="2">Speed: 2x</option>
+            <option value="2.5">Speed: 2.5x</option>
+            <option value="3">Speed: 3x</option>
+            <option value="4">Speed: 4x</option>
+            <option value="custom">Custom Speed Input</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Shortcut Key</label>
+          <div class="shortcut-recording" id="shortcut-recording">
+            <span class="shortcut-recording-text"
+              >Click to record shortcut</span
+            >
+            <i class="ph ph-keyboard"></i>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="cancel-btn" id="cancel-shortcut">Cancel</button>
+          <button class="save-btn" id="save-shortcut">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button class="reset-defaults" id="reset-defaults">
+        Restore Defaults
+      </button>
+    </div>
+
+    <script src="shortcuts.js"></script>
+  </body>
+</html>
