@@ -28,9 +28,11 @@
         --success-color: #28a745;
         --danger-color: #dc3545;
         --section-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        --shortcut-key-bg: #e2e2e2;
+        --shortcut-key-text: #333333;
       }
 
-      /* Light mode */
+      /* Light mode - improved colors for better contrast and harmony */
       body.light-theme {
         --primary-color: #0a85e9;
         --primary-hover: #0070cc;
@@ -43,6 +45,8 @@
         --input-bg: #ffffff;
         --input-border: #d0d0d0;
         --section-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        --shortcut-key-bg: #e8e8e8;
+        --shortcut-key-text: #333333;
       }
 
       * {
@@ -103,10 +107,14 @@
       }
 
       .content {
-        padding: 16px;
+        padding: 12px;
       }
 
-      /* Shortcut items */
+      .section {
+        margin-bottom: 12px;
+      }
+
+      /* Shortcut items - Updated UI to match the image */
       .shortcuts-list {
         display: flex;
         flex-direction: column;
@@ -124,30 +132,29 @@
       }
 
       .shortcut-action {
-        font-size: 14px;
-        font-weight: 500;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .shortcut-keys-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
 
       .shortcut-keys {
         display: flex;
         align-items: center;
-        gap: 6px;
-      }
-
-      .key-badge {
-        background-color: var(--bg-tertiary);
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        padding: 4px 8px;
-        font-size: 12px;
-        font-weight: 600;
-        min-width: 24px;
-        text-align: center;
+        background-color: var(--shortcut-key-bg);
+        border-radius: 50px;
+        padding: 8px 16px;
+        color: var(--shortcut-key-text);
+        font-size: 14px;
+        font-weight: 500;
       }
 
       .key-plus {
-        color: var(--text-secondary);
-        font-weight: 400;
+        margin: 0 4px;
       }
 
       .record-button {
@@ -207,8 +214,16 @@
         transition: background-color 0.2s;
       }
 
+      .light-theme .add-shortcut {
+        background-color: rgba(10, 133, 233, 0.1);
+      }
+
       .add-shortcut:hover {
         background-color: rgba(16, 152, 252, 0.25);
+      }
+
+      .light-theme .add-shortcut:hover {
+        background-color: rgba(10, 133, 233, 0.2);
       }
 
       /* New shortcut form */
@@ -349,10 +364,18 @@
         align-items: center;
         justify-content: center;
         transition: background-color 0.2s;
+        font-size: 18px;
       }
 
       .delete-shortcut:hover {
         background-color: rgba(220, 53, 69, 0.1);
+      }
+
+      /* Theme button */
+      .theme-button {
+        width: 24px;
+        height: 24px;
+        color: var(--text-color);
       }
     </style>
   </head>

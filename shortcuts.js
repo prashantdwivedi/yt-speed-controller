@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("keydown", handleKeyDown);
 });
 
-// Render shortcuts list
+// Render shortcuts list with updated UI to match the image
 function renderShortcuts() {
   const container = document.getElementById("shortcuts-list");
   container.innerHTML = "";
@@ -109,25 +109,17 @@ function renderShortcuts() {
     actionText.className = "shortcut-action";
     actionText.textContent = getActionLabel(action);
 
-    // Create keys display
+    // Create keys container and display
+    const keysContainer = document.createElement("div");
+    keysContainer.className = "shortcut-keys-container";
+
+    // Create the pill-shaped key display
     const keysDisplay = document.createElement("div");
     keysDisplay.className = "shortcut-keys";
 
-    // Parse the shortcut string
-    const keys = shortcut.split("+");
-    keys.forEach((key, index) => {
-      const keyBadge = document.createElement("span");
-      keyBadge.className = "key-badge";
-      keyBadge.textContent = key;
-      keysDisplay.appendChild(keyBadge);
-
-      if (index < keys.length - 1) {
-        const plus = document.createElement("span");
-        plus.className = "key-plus";
-        plus.textContent = "+";
-        keysDisplay.appendChild(plus);
-      }
-    });
+    // Format the shortcut string with plus signs
+    const formattedShortcut = shortcut.replace(/\+/g, " + ");
+    keysDisplay.textContent = formattedShortcut;
 
     // Create delete button
     const deleteButton = document.createElement("button");
@@ -138,10 +130,13 @@ function renderShortcuts() {
       deleteShortcut(shortcut);
     });
 
+    // Add elements to containers
+    keysContainer.appendChild(keysDisplay);
+    keysContainer.appendChild(deleteButton);
+
     // Add elements to shortcut item
     shortcutItem.appendChild(actionText);
-    shortcutItem.appendChild(keysDisplay);
-    shortcutItem.appendChild(deleteButton);
+    shortcutItem.appendChild(keysContainer);
 
     container.appendChild(shortcutItem);
   }
@@ -213,13 +208,16 @@ function updateRecordingDisplay() {
   if (!currentShortcut) return;
 
   let shortcutText = "";
-  if (currentShortcut.modifiers.Ctrl) shortcutText += "Ctrl+";
-  if (currentShortcut.modifiers.Alt) shortcutText += "Alt+";
-  if (currentShortcut.modifiers.Shift) shortcutText += "Shift+";
-  if (currentShortcut.modifiers.Meta) shortcutText += "Meta+";
+  if (currentShortcut.modifiers.Ctrl) shortcutText += "Ctrl + ";
+  if (currentShortcut.modifiers.Alt) shortcutText += "Alt + ";
+  if (currentShortcut.modifiers.Shift) shortcutText += "Shift + ";
+  if (currentShortcut.modifiers.Meta) shortcutText += "Meta + ";
 
   if (currentShortcut.key) {
     shortcutText += currentShortcut.key;
+  } else {
+    // Remove trailing " + " if no key is pressed yet
+    shortcutText = shortcutText.replace(/ \+ $/, "");
   }
 
   const recordingElement = document.getElementById("shortcut-recording");

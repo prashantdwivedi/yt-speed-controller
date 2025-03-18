@@ -23,7 +23,7 @@ window
     }
   });
 
-// Display shortcuts in the main popup
+// Display shortcuts in the main popup with updated UI to match the image
 function displayShortcuts(shortcuts) {
   const container = document.getElementById("shortcuts-container");
 
@@ -69,25 +69,13 @@ function displayShortcuts(shortcuts) {
     actionText.className = "shortcut-action";
     actionText.textContent = getActionLabel(action);
 
-    // Create keys display
+    // Create the pill-shaped key display
     const keysDisplay = document.createElement("div");
     keysDisplay.className = "shortcut-keys";
 
-    // Parse the shortcut string
-    const keys = shortcut.split("+");
-    keys.forEach((key, index) => {
-      const keyBadge = document.createElement("span");
-      keyBadge.className = "key-badge";
-      keyBadge.textContent = key;
-      keysDisplay.appendChild(keyBadge);
-
-      if (index < keys.length - 1) {
-        const plus = document.createElement("span");
-        plus.className = "key-plus";
-        plus.textContent = "+";
-        keysDisplay.appendChild(plus);
-      }
-    });
+    // Format the shortcut string with plus signs
+    const formattedShortcut = shortcut.replace(/\+/g, " + ");
+    keysDisplay.textContent = formattedShortcut;
 
     // Add elements to shortcut item
     shortcutItem.appendChild(actionText);
