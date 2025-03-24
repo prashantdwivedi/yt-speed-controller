@@ -16,6 +16,7 @@ let shortcuts = {};
 let currentTheme = "dark";
 let isRecording = false;
 let currentShortcut = null;
+let pendingDeleteAction = null;
 
 // Initialize
 document.addEventListener("DOMContentLoaded", function () {
@@ -76,14 +77,61 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("save-shortcut")
     .addEventListener("click", saveNewShortcut);
 
-  // Reset defaults
+  // Remove defaults button
   document
-    .getElementById("reset-defaults")
-    .addEventListener("click", resetToDefaults);
+    .getElementById("remove-defaults")
+    .addEventListener("click", function () {
+      showConfirmationModal(
+        "Are you sure you want to remove default shortcuts?",
+        removeDefaultShortcuts
+      );
+    });
+
+  // Clear all button
+  document.getElementById("clear-all").addEventListener("click", function () {
+    showConfirmationModal(
+      "Are you sure you want to remove ALL shortcuts?",
+      clearAllShortcuts
+    );
+  });
+
+  // Modal cancel button
+  document
+    .getElementById("modal-cancel")
+    .addEventListener("click", hideConfirmationModal);
+
+  // Modal confirm button
+  document
+    .getElementById("modal-confirm")
+    .addEventListener("click", function () {
+      if (pendingDeleteAction) {
+        pendingDeleteAction();
+        pendingDeleteAction = null;
+      }
+      hideConfirmationModal();
+    });
 
   // Listen for keyboard events when recording
   document.addEventListener("keydown", handleKeyDown);
 });
+
+// Show confirmation modal
+function showConfirmationModal(message, confirmAction) {
+  const modal = document.getElementById("confirmation-modal");
+  const modalMessage = document.getElementById("modal-message");
+
+  modalMessage.textContent = message;
+  pendingDeleteAction = confirmAction;
+
+  modal.classList.add("active");
+}
+
+// Hide confirmation modal
+function hideConfirmationModal() {
+  const modal = document.getElementById("confirmation-modal");
+  modal.classList.remove("active");
+  pendingDeleteAction = null;
+}
 
 // Render shortcuts list with updated UI to match the image
 function renderShortcuts() {
@@ -127,7 +175,10 @@ function renderShortcuts() {
     deleteButton.innerHTML = '<i class="ph ph-trash"></i>';
     deleteButton.setAttribute("data-shortcut", shortcut);
     deleteButton.addEventListener("click", function () {
-      deleteShortcut(shortcut);
+      showConfirmationModal(
+        "Are you sure you want to delete this shortcut?",
+        () => deleteShortcut(shortcut)
+      );
     });
 
     // Add elements to containers
@@ -294,29 +345,34 @@ function resetShortcutForm() {
 
 // Delete shortcut
 function deleteShortcut(shortcut) {
-  if (confirm("Are you sure you want to delete this shortcut?")) {
-    delete shortcuts[shortcut];
-    saveShortcuts();
-    renderShortcuts();
-  }
+  delete shortcuts[shortcut];
+  saveShortcuts();
+  renderShortcuts();
 }
 
-// Reset to defaults
-function resetToDefaults() {
-  if (
-    confirm(
-      "Are you sure you want to restore default shortcuts? This will remove all your custom shortcuts."
-    )
-  ) {
-    shortcuts = {
-      "Ctrl+1": 1,
-      "Ctrl+2": 2,
-      "Ctrl+5": 0.5,
-      "Ctrl+0": "custom",
-    };
-    saveShortcuts();
-    renderShortcuts();
+// Remove default shortcuts
+function removeDefaultShortcuts() {
+  const defaultShortcuts = {
+    "Ctrl+1": 1,
+    "Ctrl+2": 2,
+    "Ctrl+5": 0.5,
+    "Ctrl+0": "custom",
+  };
+
+  // Remove only default shortcuts
+  for (const key in defaultShortcuts) {
+    delete shortcuts[key];
   }
+
+  saveShortcuts();
+  renderShortcuts();
+}
+
+// Clear all shortcuts
+function clearAllShortcuts() {
+  shortcuts = {};
+  saveShortcuts();
+  renderShortcuts();
 }
 
 // Save shortcuts to storage

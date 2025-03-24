@@ -40,6 +40,7 @@
         /* Component Colors */
         --shortcut-key-bg: #383838;
         --shortcut-key-text: #f5f4f0;
+        --theme-switcher-bg: #3a3a3a;
       }
 
       /* Light mode - Harmonized with brand colors */
@@ -69,6 +70,7 @@
         /* Component Colors */
         --shortcut-key-bg: #e8e8e8;
         --shortcut-key-text: #333333;
+        --theme-switcher-bg: rgba(0, 0, 0, 0.1);
       }
 
       * {
@@ -110,13 +112,12 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: var(--primary-color);
-        border-radius: 50%;
-        color: var(--brand-white);
       }
 
-      .logo-icon {
-        font-size: 16px;
+      .logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
 
       h1 {
@@ -277,14 +278,10 @@
       /* Theme Switcher - Tailwind Style */
       .theme-switcher {
         display: flex;
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: var(--theme-switcher-bg);
         border-radius: 9999px;
         padding: 4px;
         width: fit-content;
-      }
-
-      .light-theme .theme-switcher {
-        background-color: rgba(0, 0, 0, 0.1);
       }
 
       .theme-option {
@@ -382,7 +379,7 @@
     <div class="header">
       <div class="header-title">
         <div class="logo">
-          <i class="ph ph-play logo-icon"></i>
+          <img src="icons/header-logo.png" alt="YT Speed Controller Logo" />
         </div>
         <h1>YT Speed Controller</h1>
       </div>
