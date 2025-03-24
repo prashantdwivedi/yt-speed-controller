@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YouTube Speed Controller - Shortcuts</title>
+    <title>YT Speed Controller - Shortcuts</title>
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
@@ -13,38 +13,60 @@
       href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css"
     />
     <style>
-      /* Base styles */
+      /* Base styles - Dark Mode (Default) */
       :root {
-        --primary-color: #1098fc;
-        --primary-hover: #2aa5fd;
-        --text-color: #ffffff;
-        --text-secondary: #8a8a8a;
+        /* Brand Colors */
+        --primary-color: #cb5c5b;
+        --primary-hover: #b84a49;
+        --primary-light: rgba(203, 92, 91, 0.15);
+        --primary-light-hover: rgba(203, 92, 91, 0.25);
+        --brand-white: #f5f4f0;
+
+        /* Dark Theme Colors */
+        --text-color: #f5f4f0;
+        --text-secondary: #a6a6a6;
         --bg-color: #121212;
         --bg-secondary: #1e1e1e;
         --bg-tertiary: #2a2a2a;
         --border-color: #383838;
         --input-bg: #2a2a2a;
         --input-border: #383838;
-        --success-color: #28a745;
-        --danger-color: #dc3545;
-        --section-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        --shortcut-key-bg: #e2e2e2;
-        --shortcut-key-text: #333333;
+
+        /* Utility Colors */
+        --success-color: #4caf50;
+        --danger-color: #f44336;
+        --section-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+        /* Component Colors */
+        --shortcut-key-bg: #383838;
+        --shortcut-key-text: #f5f4f0;
       }
 
-      /* Light mode - improved colors for better contrast and harmony */
+      /* Light mode - Harmonized with brand colors */
       body.light-theme {
-        --primary-color: #0a85e9;
-        --primary-hover: #0070cc;
+        /* Brand Colors remain the same */
+        --primary-color: #cb5c5b;
+        --primary-hover: #b84a49;
+        --primary-light: rgba(203, 92, 91, 0.1);
+        --primary-light-hover: rgba(203, 92, 91, 0.2);
+        --brand-white: #f5f4f0;
+
+        /* Light Theme Colors */
         --text-color: #333333;
         --text-secondary: #666666;
-        --bg-color: #f8f9fa;
+        --bg-color: #f5f4f0;
         --bg-secondary: #ffffff;
         --bg-tertiary: #f0f0f0;
         --border-color: #e0e0e0;
         --input-bg: #ffffff;
         --input-border: #d0d0d0;
+
+        /* Utility Colors */
+        --success-color: #4caf50;
+        --danger-color: #f44336;
         --section-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+        /* Component Colors */
         --shortcut-key-bg: #e8e8e8;
         --shortcut-key-text: #333333;
       }
@@ -198,7 +220,7 @@
       }
 
       .add-shortcut {
-        background-color: rgba(16, 152, 252, 0.15);
+        background-color: var(--primary-light);
         color: var(--primary-color);
         border: 1px solid var(--primary-color);
         border-radius: 8px;
@@ -214,16 +236,8 @@
         transition: background-color 0.2s;
       }
 
-      .light-theme .add-shortcut {
-        background-color: rgba(10, 133, 233, 0.1);
-      }
-
       .add-shortcut:hover {
-        background-color: rgba(16, 152, 252, 0.25);
-      }
-
-      .light-theme .add-shortcut:hover {
-        background-color: rgba(10, 133, 233, 0.2);
+        background-color: var(--primary-light-hover);
       }
 
       /* New shortcut form */
@@ -280,7 +294,7 @@
 
       .shortcut-recording.active {
         border-color: var(--primary-color);
-        background-color: rgba(16, 152, 252, 0.1);
+        background-color: var(--primary-light);
       }
 
       .shortcut-recording-text {
@@ -312,7 +326,7 @@
       .save-btn {
         flex: 1;
         background-color: var(--primary-color);
-        color: white;
+        color: var(--brand-white);
         border: none;
         border-radius: 6px;
         padding: 10px;

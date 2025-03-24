@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YouTube Speed Controller</title>
+    <title>YT Speed Controller</title>
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
@@ -13,38 +13,60 @@
       href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css"
     />
     <style>
-      /* Base styles */
+      /* Base styles - Dark Mode (Default) */
       :root {
-        --primary-color: #1098fc;
-        --primary-hover: #2aa5fd;
-        --text-color: #ffffff;
-        --text-secondary: #8a8a8a;
+        /* Brand Colors */
+        --primary-color: #cb5c5b;
+        --primary-hover: #b84a49;
+        --primary-light: rgba(203, 92, 91, 0.15);
+        --primary-light-hover: rgba(203, 92, 91, 0.25);
+        --brand-white: #f5f4f0;
+
+        /* Dark Theme Colors */
+        --text-color: #f5f4f0;
+        --text-secondary: #a6a6a6;
         --bg-color: #121212;
         --bg-secondary: #1e1e1e;
         --bg-tertiary: #2a2a2a;
         --border-color: #383838;
         --input-bg: #2a2a2a;
         --input-border: #383838;
-        --success-color: #28a745;
-        --danger-color: #dc3545;
-        --section-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        --shortcut-key-bg: #e2e2e2;
-        --shortcut-key-text: #333333;
+
+        /* Utility Colors */
+        --success-color: #4caf50;
+        --danger-color: #f44336;
+        --section-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+        /* Component Colors */
+        --shortcut-key-bg: #383838;
+        --shortcut-key-text: #f5f4f0;
       }
 
-      /* Light mode - improved colors for better contrast and harmony */
+      /* Light mode - Harmonized with brand colors */
       body.light-theme {
-        --primary-color: #0a85e9;
-        --primary-hover: #0070cc;
+        /* Brand Colors remain the same */
+        --primary-color: #cb5c5b;
+        --primary-hover: #b84a49;
+        --primary-light: rgba(203, 92, 91, 0.1);
+        --primary-light-hover: rgba(203, 92, 91, 0.2);
+        --brand-white: #f5f4f0;
+
+        /* Light Theme Colors */
         --text-color: #333333;
         --text-secondary: #666666;
-        --bg-color: #f8f9fa;
+        --bg-color: #f5f4f0;
         --bg-secondary: #ffffff;
         --bg-tertiary: #f0f0f0;
         --border-color: #e0e0e0;
         --input-bg: #ffffff;
         --input-border: #d0d0d0;
+
+        /* Utility Colors */
+        --success-color: #4caf50;
+        --danger-color: #f44336;
         --section-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+        /* Component Colors */
         --shortcut-key-bg: #e8e8e8;
         --shortcut-key-text: #333333;
       }
@@ -85,12 +107,15 @@
       .logo {
         width: 28px;
         height: 28px;
-        background-color: var(--primary-color);
-        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        color: var(--brand-white);
+      }
+
+      .logo-icon {
         font-size: 16px;
       }
 
@@ -188,12 +213,8 @@
       }
 
       .radio-input:checked + .radio-label {
-        background-color: rgba(10, 133, 233, 0.15);
+        background-color: var(--primary-light);
         border-color: var(--primary-color);
-      }
-
-      .light-theme .radio-input:checked + .radio-label {
-        background-color: rgba(10, 133, 233, 0.1);
       }
 
       .radio-text {
@@ -203,7 +224,7 @@
       }
 
       .add-btn {
-        background-color: rgba(10, 133, 233, 0.15);
+        background-color: var(--primary-light);
         color: var(--primary-color);
         border: 1px solid var(--primary-color);
         border-radius: 8px;
@@ -219,21 +240,13 @@
         transition: background-color 0.2s;
       }
 
-      .light-theme .add-btn {
-        background-color: rgba(10, 133, 233, 0.1);
-      }
-
       .add-btn:hover {
-        background-color: rgba(10, 133, 233, 0.25);
-      }
-
-      .light-theme .add-btn:hover {
-        background-color: rgba(10, 133, 233, 0.2);
+        background-color: var(--primary-light-hover);
       }
 
       .save-btn {
         background-color: var(--primary-color);
-        color: white;
+        color: var(--brand-white);
         border: none;
         border-radius: 8px;
         padding: 12px 16px;
@@ -369,9 +382,9 @@
     <div class="header">
       <div class="header-title">
         <div class="logo">
-          <i class="ph ph-play"></i>
+          <i class="ph ph-play logo-icon"></i>
         </div>
-        <h1>YouTube Speed Controller</h1>
+        <h1>YT Speed Controller</h1>
       </div>
       <div class="header-actions">
         <button class="icon-button" id="github-link" title="View on GitHub">
@@ -495,7 +508,7 @@
     </div>
 
     <div class="footer">
-      <span>Version 1.1</span>
+      <span>Version 1.3.2</span>
 
       <!-- Theme Switcher moved to footer -->
       <div class="theme-switcher">
