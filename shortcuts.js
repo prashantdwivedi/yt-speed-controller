@@ -77,13 +77,13 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("save-shortcut")
     .addEventListener("click", saveNewShortcut);
 
-  // Remove defaults button
+  // Default shortcuts button
   document
-    .getElementById("remove-defaults")
+    .getElementById("reset-defaults")
     .addEventListener("click", function () {
       showConfirmationModal(
-        "Are you sure you want to remove default shortcuts?",
-        removeDefaultShortcuts
+        "Are you sure you want to add default shortcuts? Your existing shortcuts will be preserved.",
+        addDefaultShortcuts
       );
     });
 
@@ -350,8 +350,8 @@ function deleteShortcut(shortcut) {
   renderShortcuts();
 }
 
-// Remove default shortcuts
-function removeDefaultShortcuts() {
+// Add default shortcuts (preserving user shortcuts)
+function addDefaultShortcuts() {
   const defaultShortcuts = {
     "Ctrl+1": 1,
     "Ctrl+2": 2,
@@ -359,9 +359,12 @@ function removeDefaultShortcuts() {
     "Ctrl+0": "custom",
   };
 
-  // Remove only default shortcuts
-  for (const key in defaultShortcuts) {
-    delete shortcuts[key];
+  // Add default shortcuts (preserving existing shortcuts)
+  for (const [key, value] of Object.entries(defaultShortcuts)) {
+    // Only add if not already defined by user
+    if (!shortcuts.hasOwnProperty(key)) {
+      shortcuts[key] = value;
+    }
   }
 
   saveShortcuts();
