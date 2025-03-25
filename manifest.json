@@ -1,6 +1,6 @@
 {
   "name": "YT Speed Controller",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Control YouTube video playback speed with custom buttons",
   "manifest_version": 3,
   "action": {
