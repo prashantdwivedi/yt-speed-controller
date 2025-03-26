@@ -50,7 +50,7 @@ YT Speed Controller seamlessly integrates with YouTube's interface to provide en
 
 ## Installation
 
-1. Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/apfgblbcankkkekllmadenacebembilh?utm_source=item-share-cb)
+1. Install from the [Chrome Web Store](https://chrome.google.com/webstore/detail/apfgblbcankkkekllmadenacebembilh?utm_source=github)
 2. Visit YouTube and start watching any video
 3. Use the speed controls that appear in your chosen location
 
