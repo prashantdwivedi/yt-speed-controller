@@ -11,20 +11,24 @@
 ## Features
 
 ### 🎮 Flexible Speed Controls
+
 - **Preset Speed Buttons**: Quick access to common playback speeds (1x, 1.5x, 2x, 2.5x)
 - **Custom Speed Input**: Enter any speed value between 0.1x and 10x
 - **Increment/Decrement**: Fine-tune speed with plus/minus buttons
 
 ### ⌨️ Keyboard Shortcuts
+
 - Create custom keyboard shortcuts for any playback speed
 - Quickly access the custom speed input with a shortcut
 - Fully customizable key combinations (Ctrl, Alt, Shift, Meta)
 
 ### 🎯 Placement Options
+
 - **Video Player**: Controls appear directly in the YouTube video player
 - **Subscribe Area**: Controls appear next to the subscribe button for a cleaner look
 
 ### 🎨 Theme Options
+
 - Light mode
 - Dark mode
 - System preference (automatic)
@@ -46,13 +50,14 @@ YT Speed Controller seamlessly integrates with YouTube's interface to provide en
 
 ## Installation
 
-1. Install from the [Chrome Web Store](https://chrome.google.com/webstore/detail/yt-speed-controller/your-extension-id)
+1. Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/apfgblbcankkkekllmadenacebembilh?utm_source=item-share-cb)
 2. Visit YouTube and start watching any video
 3. Use the speed controls that appear in your chosen location
 
 ## Privacy
 
 YT Speed Controller respects your privacy:
+
 - No data collection
 - No analytics
 - No external servers
