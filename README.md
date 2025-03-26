@@ -8,6 +8,10 @@
   A browser extension that enhances your YouTube viewing experience with customizable playback speed controls.
 </p>
 
+<p align="center">
+  <a href="https://www.producthunt.com/posts/yt-speed-controller?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-yt&#0045;speed&#0045;controller" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=946249&theme=light&t=1742976572412" alt="YT&#0032;Speed&#0032;Controller - Control&#0032;YouTube&#0032;video&#0032;playback&#0032;speed&#0032;with&#0032;custom&#0032;buttons | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+</p>
+
 ## Features
 
 ### 🎮 Flexible Speed Controls
